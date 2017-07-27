@@ -23,11 +23,14 @@ public class MainActivity extends AppCompatActivity {
     List<User> userList;
     RecyclerView recyclerView;
     UserAdapter userAdapter;
+    DatabaseHandler db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        db=new DatabaseHandler(this);
 
         userList = new ArrayList<>();
         recyclerView=(RecyclerView)findViewById(R.id.recycler_view);
@@ -47,14 +50,9 @@ public class MainActivity extends AppCompatActivity {
                 //Log.e(TAG, "onResponse: ");
                 for (User user : userList
                         ) {
-                    Log.e(TAG, "onCreate: " + user);
+                    //Log.e(TAG, "onCreate: " + user);
+                    db.addUser(user);
                 }
-                userAdapter=new UserAdapter(userList);
-                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-                recyclerView.setLayoutManager(mLayoutManager);
-                recyclerView.setItemAnimator(new DefaultItemAnimator());
-
-                recyclerView.setAdapter(userAdapter);
             }
 
             @Override
@@ -63,6 +61,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        userAdapter=new UserAdapter(db.getAllUser());
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
 
+        recyclerView.setAdapter(userAdapter);
     }
 }

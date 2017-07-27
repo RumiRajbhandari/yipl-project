@@ -2,6 +2,9 @@ package com.example.root.yiplchallenge;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -18,6 +21,8 @@ public class MainActivity extends AppCompatActivity {
     private final static String API_KEY = "https://jsonplaceholder.typicode.com";
     String TAG = "TAG";
     List<User> userList;
+    RecyclerView recyclerView;
+    UserAdapter userAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         userList = new ArrayList<>();
+        recyclerView=(RecyclerView)findViewById(R.id.recycler_view);
+
 
         if (API_KEY.isEmpty()) {
             Toast.makeText(MainActivity.this, "Please enter api", Toast.LENGTH_SHORT).show();
@@ -42,6 +49,12 @@ public class MainActivity extends AppCompatActivity {
                         ) {
                     Log.e(TAG, "onCreate: " + user);
                 }
+                userAdapter=new UserAdapter(userList);
+                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+                recyclerView.setLayoutManager(mLayoutManager);
+                recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+                recyclerView.setAdapter(userAdapter);
             }
 
             @Override
